@@ -1,22 +1,42 @@
 package metier;
 
-import com.sun.corba.se.spi.orb.Operation;
-
 import java.util.ArrayList;
+import java.util.List;
 
-public abstract class  compte {
+public abstract class Compte {
 
-    protected string code;
+    protected String code;
     protected double solde;
     protected List<Operation> operations;
 
-    // constructeur
-    public compte(string code , double solde){
+    // Constructeur
+    public Compte(String code, double solde) {
         this.code = code;
-        this.solde=solde;
-        this.operations=new ArrayList<>();
+        this.solde = solde;
+        this.operations = new ArrayList<>();
     }
-    // methodes abstracts
+
+    // Méthodes abstraites
     public abstract void retirer(double montant);
-    public abstract double calculerIneret();
+    public abstract double calculerInteret();  //
     public abstract void afficherDetails();
+
+    // Méthode commune
+    public void verser(double montant) {
+        if (montant > 0) {
+            solde = solde + montant;
+            System.out.println("Versement de " + montant + " effectué avec succès. Nouveau solde : " + solde);
+        } else {
+            System.out.println("Montant invalide !");
+        }
+    }
+
+    // Getters
+    public String getCode() {
+        return code;
+    }
+
+    public double getSolde() {
+        return solde;
+    }
+}
