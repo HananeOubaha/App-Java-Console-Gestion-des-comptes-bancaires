@@ -9,11 +9,20 @@ public abstract class Compte {
     protected double solde;
     protected List<Operation> operations;
 
+    // conteur initialiser par 1
+    private static int compteur = 1 ;
+
     // Constructeur
     public Compte(String code, double solde) {
         this.code = code;
         this.solde = solde;
         this.operations = new ArrayList<>();
+    }
+    // generation d'un code unique
+    private String genererCodeUnique(){
+        String codeUnique = String.format("CPT-%0.5d",compteur);
+        compteur++;
+        return codeUnique;
     }
 
     // Méthodes abstraites
