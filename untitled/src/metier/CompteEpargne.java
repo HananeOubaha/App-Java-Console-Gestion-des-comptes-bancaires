@@ -3,10 +3,12 @@ package metier;
 public class CompteEpargne extends Compte {
     private double tauxInteret;
 
+    // constructuer
     public CompteEpargne(String code, double solde, double tauxInteret) {
         super(code,solde);
         this.tauxInteret = tauxInteret;
     }
+    // REDIFINITON LA methode abstraite retirer
     @Override
     public void retirer(double montant) {
         if (montant <= 0) {
