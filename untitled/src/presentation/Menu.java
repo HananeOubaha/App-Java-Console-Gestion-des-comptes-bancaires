@@ -1,8 +1,10 @@
 package presentation;
 
-import metier.BanqueService;
+import metier.*;
+import utilitaire.Utils;
+
+import java.util.List;
 import java.util.Scanner;
-import metier.OperationException;
 
 public class Menu {
 
@@ -32,12 +34,12 @@ public class Menu {
                 choix = Integer.parseInt(scanner.nextLine());
                 traiterChoix(choix);
             } catch (NumberFormatException e) {
-                System.out.println("Veuillez entrer un nombre valide !");
+                Utils.afficherErreur("Veuillez entrer un nombre valide !");
             }
 
         } while (choix != 0);
 
-        System.out.println("Merci d'avoir utilisé l'application !");
+        Utils.afficherSucces("Merci d'avoir utilisé l'application !");
     }
 
     private void traiterChoix(int choix) {
@@ -49,25 +51,25 @@ public class Menu {
                 effectuerVersement();
                 break;
             case 3:
-
+                effectuerRetrait();
                 break;
             case 4:
-                //  virement
+                effectuerVirement();
                 break;
             case 5:
-                // consulter solde
+                consulterSolde();
                 break;
             case 6:
-                // consulter opérations
+                consulterOperations();
                 break;
             case 0:
-                System.out.println("Fermeture du menu...");
+                Utils.afficherSucces("Fermeture du menu...");
                 break;
             default:
-                System.out.println("Option invalide !");
+                Utils.afficherErreur("Option invalide !");
         }
     }
-    // methode pour la création du compte
+
     private void creerCompte() {
         System.out.println("\nCréer un compte : ");
         System.out.println("1. Compte Courant");
@@ -78,7 +80,7 @@ public class Menu {
         try {
             typeCompte = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            System.out.println("Choix invalide !");
+            Utils.afficherErreur("Choix invalide !");
             return;
         }
 
@@ -87,7 +89,7 @@ public class Menu {
         try {
             solde = Double.parseDouble(scanner.nextLine());
         } catch (NumberFormatException e) {
-            System.out.println("Montant invalide !");
+            Utils.afficherErreur("Montant invalide !");
             return;
         }
 
@@ -98,28 +100,33 @@ public class Menu {
                 try {
                     decouvert = Double.parseDouble(scanner.nextLine());
                 } catch (NumberFormatException e) {
-                    System.out.println("Montant invalide !");
+                    Utils.afficherErreur("Montant invalide !");
                     return;
                 }
-                banqueService.creerCompteCourant(solde, decouvert);
-                System.out.println("Compte courant créé !");
+                CompteCourant compteC = banqueService.creerCompteCourant(solde, decouvert);
+                Utils.afficherSucces("Compte courant créé !");
+                Utils.afficherCompte(compteC);
                 break;
+
             case 2:
                 System.out.print("Taux d'intérêt (%) : ");
                 double taux;
                 try {
                     taux = Double.parseDouble(scanner.nextLine());
                 } catch (NumberFormatException e) {
-                    System.out.println("Montant invalide !");
+                    Utils.afficherErreur("Montant invalide !");
                     return;
                 }
-                banqueService.creerCompteEpargne(solde, taux);
-                System.out.println("Compte épargne créé !");
+                CompteEpargne compteE = banqueService.creerCompteEpargne(solde, taux);
+                Utils.afficherSucces("Compte épargne créé !");
+                Utils.afficherCompte(compteE);
                 break;
+
             default:
-                System.out.println("Type de compte invalide !");
+                Utils.afficherErreur("Type de compte invalide !");
         }
     }
+
     private void effectuerVersement() {
         System.out.print("Code du compte : ");
         String code = scanner.nextLine();
@@ -129,11 +136,11 @@ public class Menu {
         try {
             montant = Double.parseDouble(scanner.nextLine());
             if (montant <= 0) {
-                System.out.println("Le montant doit être positif !");
+                Utils.afficherErreur("Le montant doit être positif !");
                 return;
             }
         } catch (NumberFormatException e) {
-            System.out.println("Montant invalide !");
+            Utils.afficherErreur("Montant invalide !");
             return;
         }
 
@@ -142,10 +149,100 @@ public class Menu {
 
         try {
             banqueService.verser(code, montant, source);
-            System.out.println("Versement effectué avec succès !");
+            Utils.afficherSucces("Versement effectué avec succès !");
+            Utils.afficherCompte(banqueService.getAllComptes()
+                    .stream().filter(c -> c.getCode().equals(code)).findFirst().orElse(null));
         } catch (OperationException e) {
-            System.out.println("Erreur : " + e.getMessage());
+            Utils.afficherErreur(e.getMessage());
         }
     }
 
+    private void effectuerRetrait() {
+        System.out.print("Code du compte : ");
+        String code = scanner.nextLine();
+
+        System.out.print("Montant à retirer : ");
+        double montant;
+        try {
+            montant = Double.parseDouble(scanner.nextLine());
+            if (montant <= 0) {
+                Utils.afficherErreur("Le montant doit être positif !");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Utils.afficherErreur("Montant invalide !");
+            return;
+        }
+
+        System.out.print("Destination du retrait (ex: ATM, Chèque, Virement sortant) : ");
+        String destination = scanner.nextLine();
+
+        try {
+            banqueService.retirer(code, montant, destination);
+            Utils.afficherSucces("Retrait effectué avec succès !");
+            Utils.afficherCompte(banqueService.getAllComptes()
+                    .stream().filter(c -> c.getCode().equals(code)).findFirst().orElse(null));
+        } catch (OperationException e) {
+            Utils.afficherErreur(e.getMessage());
+        }
+    }
+
+    private void effectuerVirement() {
+        System.out.print("Code du compte source : ");
+        String codeSource = scanner.nextLine();
+        System.out.print("Code du compte destination : ");
+        String codeDest = scanner.nextLine();
+
+        System.out.print("Montant à virer : ");
+        double montant;
+        try {
+            montant = Double.parseDouble(scanner.nextLine());
+            if (montant <= 0) {
+                Utils.afficherErreur("Le montant doit être positif !");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Utils.afficherErreur("Montant invalide !");
+            return;
+        }
+
+        try {
+            banqueService.virement(codeSource, codeDest, montant);
+            Utils.afficherSucces("Virement effectué avec succès !");
+            Utils.afficherCompte(banqueService.getAllComptes()
+                    .stream().filter(c -> c.getCode().equals(codeSource)).findFirst().orElse(null));
+            Utils.afficherCompte(banqueService.getAllComptes()
+                    .stream().filter(c -> c.getCode().equals(codeDest)).findFirst().orElse(null));
+        } catch (OperationException e) {
+            Utils.afficherErreur(e.getMessage());
+        }
+    }
+
+    private void consulterSolde() {
+        System.out.print("Code du compte : ");
+        String code = scanner.nextLine();
+
+        try {
+            double solde = banqueService.getSolde(code);
+            Utils.afficherSucces("Solde du compte " + code + " : " + Utils.formatMontant(solde));
+        } catch (OperationException e) {
+            Utils.afficherErreur(e.getMessage());
+        }
+    }
+
+    private void consulterOperations() {
+        System.out.print("Code du compte : ");
+        String code = scanner.nextLine();
+
+        try {
+            List<Operation> ops = banqueService.getOperations(code);
+            System.out.println("Opérations de " + code + " :");
+            for (Operation op : ops) {
+                op.afficherDetails();
+                System.out.println("----");
+            }
+        } catch (OperationException e) {
+            Utils.afficherErreur(e.getMessage());
+        }
+    }
 }
