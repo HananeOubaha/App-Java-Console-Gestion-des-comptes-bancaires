@@ -22,7 +22,7 @@ public class CompteCourant extends Compte {
         this.solde = nouveauSolde;
         Retrait r = new Retrait(montant, destination);
         this.operations.add(r);
-        System.out.println("Retrait de " + montant + " effectué. Nouveau solde : " + this.solde);
+        System.out.println("✅ Retrait de " + montant + " MAD effectué. Nouveau solde : " + this.solde + " MAD");
     }
 
     // Redéfinition de la méthode calculerInteret()
@@ -35,9 +35,19 @@ public class CompteCourant extends Compte {
     @Override
     public void afficherDetails() {
         System.out.println("=== Compte Courant ===");
-        System.out.println("Code: " + code);
-        System.out.println("Solde: " + solde);
-        System.out.println("Découvert autorisé: " + decouvert);
+        System.out.println("Code              : " + code);
+        System.out.println("Solde             : " + solde + " MAD");
+        System.out.println("Découvert autorisé: " + decouvert + " MAD");
+        System.out.println("========================");
+    }
+
+    @Override
+    public String toString() {
+        return "CompteCourant{" +
+                "code='" + code + '\'' +
+                ", solde=" + solde +
+                ", decouvert=" + decouvert +
+                '}';
     }
 
     // Getters et Setters

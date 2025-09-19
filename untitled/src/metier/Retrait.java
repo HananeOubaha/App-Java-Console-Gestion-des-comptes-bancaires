@@ -10,7 +10,26 @@ public class Retrait extends Operation{
 
     @Override
     public void afficherDetails() {
-        super.afficherDetails();
-        System.out.println("Destination : " + destination);
+        System.out.println("=== Détails du Retrait ===");
+        System.out.println("Numéro       : " + numero);
+        System.out.println("Date         : " + date);
+        System.out.println("Montant      : " + montant + " MAD");
+        System.out.println("Destination  : " + destination);
+        System.out.println("===========================");
+    }
+
+    @Override
+    public String toString() {
+        return "Retrait{" +
+                "numero='" + numero + '\'' +
+                ", date=" + date +
+                ", montant=" + montant +
+                ", destination='" + destination + '\'' +
+                '}';
+    }
+
+    // Getter
+    public String getDestination() {
+        return destination;
     }
 }

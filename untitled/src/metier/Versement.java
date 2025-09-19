@@ -9,8 +9,26 @@ public class Versement extends Operation {
     }
 
     @Override
-     public void afficherDetails() {
-        super.afficherDetails();
-        System.out.println("Source : " + source);
+    public void afficherDetails() {
+        System.out.println("=== Détails du Versement ===");
+        System.out.println("Numéro   : " + numero);
+        System.out.println("Date     : " + date);
+        System.out.println("Montant  : " + montant + " MAD");
+        System.out.println("Source   : " + source);
+        System.out.println("============================");
+    }
+    @Override
+    public String toString() {
+        return "Versement{" +
+                "numero='" + numero + '\'' +
+                ", date=" + date +
+                ", montant=" + montant +
+                ", source='" + source + '\'' +
+                '}';
+    }
+
+    // Getter
+    public String getSource() {
+        return source;
     }
 }
