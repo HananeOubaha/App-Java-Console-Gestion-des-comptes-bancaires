@@ -4,25 +4,24 @@ public class CompteCourant extends Compte {
     private double decouvert;
 
     // Constructeur
-    public CompteCourant(String code, double solde, double decouvert) {
-        super(code, solde);
+    public CompteCourant(String code,double solde, double decouvert) {
+        super(code,solde);
         this.decouvert = decouvert;
     }
 
     // Redéfinition de la méthode retirer()
     @Override
-    public void retirer(double montant) {
+    public void retirer(double montant, String destination) throws OperationException {
         if (montant <= 0) {
-            System.out.println("Montant inacceptable pour effectuer un retrait.");
-            return;
+            throw new OperationException("Montant inacceptable pour effectuer un retrait.");
         }
         double nouveauSolde = this.solde - montant;
-
         if (nouveauSolde < -decouvert) {
-            System.out.println("Impossible d'effectuer un retrait : vous dépassez la limite de découvert.");
-            return;
+            throw new OperationException("Impossible d'effectuer un retrait : vous dépassez la limite de découvert.");
         }
         this.solde = nouveauSolde;
+        Retrait r = new Retrait(montant, destination);
+        this.operations.add(r);
         System.out.println("Retrait de " + montant + " effectué. Nouveau solde : " + this.solde);
     }
 

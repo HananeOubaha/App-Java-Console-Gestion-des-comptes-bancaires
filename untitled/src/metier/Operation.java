@@ -24,4 +24,10 @@ public abstract class Operation {
     public double getMontant() {
         return montant;
     }
+    public String getNumero() {
+        return numero;
+    }
+    public LocalDate getDate() {
+        return date;
+    }
 }

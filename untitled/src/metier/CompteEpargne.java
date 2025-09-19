@@ -10,14 +10,19 @@ public class CompteEpargne extends Compte {
     }
     // REDIFINITON LA methode abstraite retirer
     @Override
-    public void retirer(double montant) {
+    public void retirer(double montant,String destination) throws OperationException {
         if (montant <= 0) {
-            System.out.println("Retrait innaceptable : solde insuffisant .");
-            return;
+            throw new OperationException("Retrait innaceptable : solde insuffisant .");
         }
-        this.solde -= montant;
-        System.out.println("Retrait de " + montant + "effectué avec succés.Nouveau solde = " + this.solde);
+        if (this.solde < montant) {
+            throw new OperationException("Retrait refusé : solde insuffisant.");
+        }
+        this.solde = this.solde - montant;
+        Retrait r = new Retrait(montant, destination);
+        this.operations.add(r);
+        throw new OperationException("Retrait de " + montant + "effectué avec succés.Nouveau solde = " + this.solde);
     }
+
     @Override
     public double calculerInteret() {
         return this.solde * this.tauxInteret;

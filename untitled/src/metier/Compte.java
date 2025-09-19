@@ -26,18 +26,18 @@ public abstract class Compte {
     }
 
     // Méthodes abstraites
-    public abstract void retirer(double montant);
+    public abstract void retirer(double montant, String destination) throws OperationException;
     public abstract double calculerInteret();  //
     public abstract void afficherDetails();
 
     // Méthode commune
-    public void verser(double montant) {
-        if (montant > 0) {
-            solde = solde + montant;
-            System.out.println("Versement de " + montant + " effectué avec succès. Nouveau solde : " + solde);
-        } else {
-            System.out.println("Montant invalide !");
+    public void verser(double montant,String source) throws OperationException {
+        if (montant <= 0) {
+            throw new OperationException("Le montant du versement doit être positif.");
         }
+        this.solde += montant;
+        Versement v = new Versement(montant, source);
+        this.operations.add(v);
     }
 
     // Getters
@@ -48,4 +48,6 @@ public abstract class Compte {
     public double getSolde() {
         return solde;
     }
+    public List<Operation> getListeOperations() { return operations; }
+
 }
