@@ -2,6 +2,7 @@ package presentation;
 
 import metier.BanqueService;
 import java.util.Scanner;
+import metier.OperationException;
 
 public class Menu {
 
@@ -45,19 +46,19 @@ public class Menu {
                 creerCompte();
                 break;
             case 2:
-                // Appeler méthode versement
+                effectuerVersement();
                 break;
             case 3:
-                // Appeler méthode retrait
+
                 break;
             case 4:
-                // Appeler méthode virement
+                //  virement
                 break;
             case 5:
-                // Appeler méthode consulter solde
+                // consulter solde
                 break;
             case 6:
-                // Appeler méthode consulter opérations
+                // consulter opérations
                 break;
             case 0:
                 System.out.println("Fermeture du menu...");
@@ -119,4 +120,32 @@ public class Menu {
                 System.out.println("Type de compte invalide !");
         }
     }
+    private void effectuerVersement() {
+        System.out.print("Code du compte : ");
+        String code = scanner.nextLine();
+
+        System.out.print("Montant à verser : ");
+        double montant;
+        try {
+            montant = Double.parseDouble(scanner.nextLine());
+            if (montant <= 0) {
+                System.out.println("Le montant doit être positif !");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Montant invalide !");
+            return;
+        }
+
+        System.out.print("Source du versement : ");
+        String source = scanner.nextLine();
+
+        try {
+            banqueService.verser(code, montant, source);
+            System.out.println("Versement effectué avec succès !");
+        } catch (OperationException e) {
+            System.out.println("Erreur : " + e.getMessage());
+        }
+    }
+
 }
