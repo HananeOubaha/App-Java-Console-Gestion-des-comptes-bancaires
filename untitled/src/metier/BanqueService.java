@@ -6,21 +6,21 @@ public class BanqueService {
     private Map<String, Compte> comptes = new HashMap<>();
 
     // création d'un compte courant et le stocker
-    public Compte creerCompteCourant(String code,double solde, double decouvert) {
-        CompteCourant c = new CompteCourant(code,solde, decouvert);
+    public CompteCourant creerCompteCourant(double solde, double decouvert) {
+        CompteCourant c = new CompteCourant(solde, decouvert);
         comptes.put(c.getCode(), c);
         return c;
     }
 
     // création d'un compte épargne et le stocker
-    public Compte creerCompteEpargne(String code,double solde, double taux) {
-        CompteEpargne c = new CompteEpargne(code,solde, taux);
+    public CompteEpargne creerCompteEpargne(double solde, double taux) {
+        CompteEpargne c = new CompteEpargne(solde, taux);
         comptes.put(c.getCode(), c);
         return c;
     }
 
     // versement
-    public void verser(String code, double montant, String source) throws OperationException {
+    public void verser(String code,double montant, String source) throws OperationException {
         Compte c = comptes.get(code);
         if (c == null) throw new OperationException("Compte introuvable : " + code);
         c.verser(montant, source);

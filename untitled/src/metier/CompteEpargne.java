@@ -4,8 +4,8 @@ public class CompteEpargne extends Compte {
     private double tauxInteret;
 
     // constructuer
-    public CompteEpargne(String code, double solde, double tauxInteret) {
-        super(code,solde);
+    public CompteEpargne(double solde, double tauxInteret) {
+        super(solde);
         this.tauxInteret = tauxInteret;
     }
     // REDIFINITON LA methode abstraite retirer
@@ -20,7 +20,6 @@ public class CompteEpargne extends Compte {
         this.solde = this.solde - montant;
         Retrait r = new Retrait(montant, destination);
         this.operations.add(r);
-        throw new OperationException("Retrait de " + montant + "effectué avec succés.Nouveau solde = " + this.solde);
     }
 
     @Override

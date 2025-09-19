@@ -13,14 +13,14 @@ public abstract class Compte {
     private static int compteur = 1 ;
 
     // Constructeur
-    public Compte(String code, double solde) {
-        this.code = code;
+    public Compte(double solde) {
+        this.code = genererCodeUnique();
         this.solde = solde;
         this.operations = new ArrayList<>();
     }
     // generation d'un code unique
     private String genererCodeUnique(){
-        String codeUnique = String.format("CPT-%0.5d",compteur);
+        String codeUnique = String.format("CPT-%05d", compteur);
         compteur++;
         return codeUnique;
     }

@@ -4,8 +4,8 @@ public class CompteCourant extends Compte {
     private double decouvert;
 
     // Constructeur
-    public CompteCourant(String code,double solde, double decouvert) {
-        super(code,solde);
+    public CompteCourant(double solde, double decouvert) {
+        super(solde);
         this.decouvert = decouvert;
     }
 
