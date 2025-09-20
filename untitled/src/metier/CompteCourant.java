@@ -22,7 +22,7 @@ public class CompteCourant extends Compte {
         this.solde = nouveauSolde;
         Retrait r = new Retrait(montant, destination);
         this.operations.add(r);
-        System.out.println("✅ Retrait de " + montant + " MAD effectué. Nouveau solde : " + this.solde + " MAD");
+        System.out.println(" Retrait de " + montant + " MAD effectué. Nouveau solde : " + this.solde + " MAD");
     }
 
     // Redéfinition de la méthode calculerInteret()

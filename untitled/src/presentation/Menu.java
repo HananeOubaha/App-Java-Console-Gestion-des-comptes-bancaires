@@ -21,7 +21,7 @@ public class Menu {
 
         do {
             System.out.println("\n=== Menu Banque ===");
-            System.out.println("1. Créer un compte");
+            System.out.println("1. Creer un compte");
             System.out.println("2. Effectuer un versement");
             System.out.println("3. Effectuer un retrait");
             System.out.println("4. Effectuer un virement");
@@ -39,7 +39,7 @@ public class Menu {
 
         } while (choix != 0);
 
-        Utils.afficherSucces("Merci d'avoir utilisé l'application !");
+        Utils.afficherSucces("Merci d'avoir utilise l'application !");
     }
 
     private void traiterChoix(int choix) {
@@ -71,9 +71,9 @@ public class Menu {
     }
 
     private void creerCompte() {
-        System.out.println("\nCréer un compte : ");
+        System.out.println("\nCreer un compte : ");
         System.out.println("1. Compte Courant");
-        System.out.println("2. Compte Épargne");
+        System.out.println("2. Compte epargne");
         System.out.print("Votre choix : ");
 
         int typeCompte;
@@ -95,7 +95,7 @@ public class Menu {
 
         switch (typeCompte) {
             case 1:
-                System.out.print("Découvert autorisé : ");
+                System.out.print("Decouvert autorise : ");
                 double decouvert;
                 try {
                     decouvert = Double.parseDouble(scanner.nextLine());
@@ -104,12 +104,12 @@ public class Menu {
                     return;
                 }
                 CompteCourant compteC = banqueService.creerCompteCourant(solde, decouvert);
-                Utils.afficherSucces("Compte courant créé !");
+                Utils.afficherSucces("Compte courant cree !");
                 Utils.afficherCompte(compteC);
                 break;
 
             case 2:
-                System.out.print("Taux d'intérêt (%) : ");
+                System.out.print("Taux d'interet (%) : ");
                 double taux;
                 try {
                     taux = Double.parseDouble(scanner.nextLine());
@@ -118,7 +118,7 @@ public class Menu {
                     return;
                 }
                 CompteEpargne compteE = banqueService.creerCompteEpargne(solde, taux);
-                Utils.afficherSucces("Compte épargne créé !");
+                Utils.afficherSucces("Compte epargne cree !");
                 Utils.afficherCompte(compteE);
                 break;
 
@@ -131,7 +131,7 @@ public class Menu {
         System.out.print("Code du compte : ");
         String code = scanner.nextLine();
 
-        System.out.print("Montant à verser : ");
+        System.out.print("Montant a verser : ");
         double montant;
         try {
             montant = Double.parseDouble(scanner.nextLine());
@@ -149,7 +149,7 @@ public class Menu {
 
         try {
             banqueService.verser(code, montant, source);
-            Utils.afficherSucces("Versement effectué avec succès !");
+            Utils.afficherSucces("Versement effectue avec succes !");
             Utils.afficherCompte(banqueService.getAllComptes()
                     .stream().filter(c -> c.getCode().equals(code)).findFirst().orElse(null));
         } catch (OperationException e) {
@@ -161,7 +161,7 @@ public class Menu {
         System.out.print("Code du compte : ");
         String code = scanner.nextLine();
 
-        System.out.print("Montant à retirer : ");
+        System.out.print("Montant a retirer : ");
         double montant;
         try {
             montant = Double.parseDouble(scanner.nextLine());
@@ -174,12 +174,12 @@ public class Menu {
             return;
         }
 
-        System.out.print("Destination du retrait (ex: ATM, Chèque, Virement sortant) : ");
+        System.out.print("Destination du retrait (ex: ATM, Cheque, Virement sortant) : ");
         String destination = scanner.nextLine();
 
         try {
             banqueService.retirer(code, montant, destination);
-            Utils.afficherSucces("Retrait effectué avec succès !");
+            Utils.afficherSucces("Retrait effectue avec succès !");
             Utils.afficherCompte(banqueService.getAllComptes()
                     .stream().filter(c -> c.getCode().equals(code)).findFirst().orElse(null));
         } catch (OperationException e) {
@@ -193,12 +193,12 @@ public class Menu {
         System.out.print("Code du compte destination : ");
         String codeDest = scanner.nextLine();
 
-        System.out.print("Montant à virer : ");
+        System.out.print("Montant a virer : ");
         double montant;
         try {
             montant = Double.parseDouble(scanner.nextLine());
             if (montant <= 0) {
-                Utils.afficherErreur("Le montant doit être positif !");
+                Utils.afficherErreur("Le montant doit etre positif !");
                 return;
             }
         } catch (NumberFormatException e) {
@@ -208,7 +208,7 @@ public class Menu {
 
         try {
             banqueService.virement(codeSource, codeDest, montant);
-            Utils.afficherSucces("Virement effectué avec succès !");
+            Utils.afficherSucces("Virement effectue avec succes !");
             Utils.afficherCompte(banqueService.getAllComptes()
                     .stream().filter(c -> c.getCode().equals(codeSource)).findFirst().orElse(null));
             Utils.afficherCompte(banqueService.getAllComptes()
@@ -236,7 +236,7 @@ public class Menu {
 
         try {
             List<Operation> ops = banqueService.getOperations(code);
-            System.out.println("Opérations de " + code + " :");
+            System.out.println("Operations de " + code + " :");
             for (Operation op : ops) {
                 op.afficherDetails();
                 System.out.println("----");
